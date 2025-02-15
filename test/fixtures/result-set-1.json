@@ -1,0 +1,38 @@
+{
+    "page": 1,
+    "results_per_page": 1,
+    "results_size": 1,
+    "total_results_size": 2,
+    "total_pages": 2,
+    "next_page": "https://reponame.cdn.prismic.io/api/v2/documents/search?ref=MASTER-REF&page=2&pageSize=1",
+    "prev_page": null,
+    "results": [
+        {
+            "id": "document-1",
+            "uid": null,
+            "url": null,
+            "type": "page",
+            "href": "https://reponame.cdn.prismic.io/api/v2/documents/search?ref=MASTER-REF&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22document-1%22%29+%5D%5D",
+            "tags": [
+                "tool"
+            ],
+            "first_publication_date": "2025-02-14T17:08:05+0000",
+            "last_publication_date": "2025-02-14T17:08:05+0000",
+            "slugs": [],
+            "linked_documents": [],
+            "lang": "en-gb",
+            "alternate_languages": [],
+            "data": {
+                "content": [
+                    {
+                        "type": "heading1",
+                        "text": "Some Content",
+                        "spans": []
+                    }
+                ]
+            }
+        }
+    ],
+    "version": "60a9f2c",
+    "license": "All Rights Reserved"
+}

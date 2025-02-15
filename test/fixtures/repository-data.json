@@ -1,0 +1,20 @@
+{
+    "refs": [
+        {
+            "id": "master",
+            "ref": "master-ref",
+            "label": "Master",
+            "isMasterRef": true
+        }
+    ],
+    "types": {
+        "page": "A Web Page"
+    },
+    "languages": [
+        {
+            "id": "en-gb",
+            "name": "English - United Kingdom",
+            "is_master": true
+        }
+    ]
+}
