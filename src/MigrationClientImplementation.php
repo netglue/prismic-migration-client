@@ -63,6 +63,9 @@ final readonly class MigrationClientImplementation implements MigrationClient
 
         try {
             return (new MapperBuilder())
+                ->enableFlexibleCasting()
+                ->allowSuperfluousKeys()
+                ->allowPermissiveTypes()
                 ->mapper()
                 ->map(
                     MigrationResult::class,
@@ -93,6 +96,9 @@ final readonly class MigrationClientImplementation implements MigrationClient
 
         try {
             return (new MapperBuilder())
+                ->enableFlexibleCasting()
+                ->allowSuperfluousKeys()
+                ->allowPermissiveTypes()
                 ->mapper()
                 ->map(
                     MigrationResult::class,
