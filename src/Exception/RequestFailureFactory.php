@@ -57,6 +57,18 @@ final readonly class RequestFailureFactory
             );
         }
 
+        if ($response->getStatusCode() === StatusCodeInterface::STATUS_TOO_MANY_REQUESTS) {
+            return new RateLimitExceeded(
+                $request,
+                $response,
+                sprintf(
+                    'Rate limit exceeded: %s',
+                    $responseBody,
+                ),
+                $response->getStatusCode(),
+            );
+        }
+
         return new GenericRequestFailure(
             $request,
             $response,

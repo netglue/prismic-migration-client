@@ -14,6 +14,7 @@ use Laminas\Diactoros\UriFactory;
 use Override;
 use PHPUnit\Framework\TestCase;
 use Prismic\Migration\Exception\AssetNotFound;
+use Prismic\Migration\Exception\RateLimitExceeded;
 use Prismic\Migration\MigrationClientImplementation;
 use Prismic\Migration\Model\MigrationDocument;
 use Prismic\Migration\Model\MigrationDocumentPatch;
@@ -75,6 +76,24 @@ final class MigrationClientImplementationTest extends TestCase
         );
 
         $this->expectException(AssetNotFound::class);
+
+        $this->client->createDocument(new MigrationDocument(
+            'Title',
+            'type',
+            'uid',
+            'en-GB',
+            [],
+        ));
+    }
+
+    public function testRateLimitScenario(): void
+    {
+        $this->http->addResponse(
+            $this->fixtureResponse(__DIR__ . '/../fixtures/create-document-with-missing-asset.txt')
+                ->withStatus(StatusCodeInterface::STATUS_TOO_MANY_REQUESTS),
+        );
+
+        $this->expectException(RateLimitExceeded::class);
 
         $this->client->createDocument(new MigrationDocument(
             'Title',
