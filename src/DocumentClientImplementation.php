@@ -7,8 +7,10 @@ namespace Prismic\Migration;
 use CuyZ\Valinor\Mapper\Source\JsonSource;
 use CuyZ\Valinor\MapperBuilder;
 use Fig\Http\Message\RequestMethodInterface;
+use Override;
 use Prismic\Migration\Exception\CommunicationFailure;
 use Prismic\Migration\Exception\RequestFailure;
+use Prismic\Migration\Exception\RequestFailureFactory;
 use Prismic\Migration\Exception\RuntimeError;
 use Prismic\Migration\Exception\UnexpectedResponse;
 use Prismic\Migration\Model\Document;
@@ -89,6 +91,7 @@ final class DocumentClientImplementation implements DocumentClient
         return $this->repository()->masterRef();
     }
 
+    #[Override]
     public function findById(string $id): Document
     {
         $resultSet = $this->documentQuery(sprintf('[[at(document.id, "%s")]]', $id));
@@ -100,6 +103,7 @@ final class DocumentClientImplementation implements DocumentClient
     }
 
     /** @inheritDoc */
+    #[Override]
     public function findAll(): array
     {
         $first = $this->documentQuery();
@@ -167,6 +171,10 @@ final class DocumentClientImplementation implements DocumentClient
         return $this->requestFactory->createRequest($method, $uri);
     }
 
+    /**
+     * @throws CommunicationFailure If it is not possible to communicate with the API.
+     * @throws RequestFailure If the response indicates any kind of failure status code.
+     */
     private function sendRequest(RequestInterface $request): ResponseInterface
     {
         try {
@@ -176,7 +184,7 @@ final class DocumentClientImplementation implements DocumentClient
         }
 
         if ($response->getStatusCode() >= 400) {
-            throw RequestFailure::fromExchange($request, $response);
+            throw RequestFailureFactory::fromExchange($request, $response);
         }
 
         return $response;

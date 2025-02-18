@@ -10,9 +10,10 @@ use Laminas\Diactoros\Response;
 use Laminas\Diactoros\ResponseFactory;
 use Laminas\Diactoros\StreamFactory;
 use Laminas\Diactoros\UriFactory;
+use Override;
 use PHPUnit\Framework\TestCase;
 use Prismic\Migration\DocumentClientImplementation;
-use Prismic\Migration\Exception\RequestFailure;
+use Prismic\Migration\Exception\GenericRequestFailure;
 use Prismic\Migration\Exception\RuntimeError;
 use Psr\Http\Message\ResponseInterface;
 
@@ -23,6 +24,7 @@ final class DocumentClientImplementationTest extends TestCase
     private Client $http;
     private DocumentClientImplementation $client;
 
+    #[Override]
     protected function setUp(): void
     {
         $this->http = new Client(new ResponseFactory());
@@ -95,7 +97,7 @@ final class DocumentClientImplementationTest extends TestCase
         try {
             $this->client->findById('foo');
             self::fail();
-        } catch (RequestFailure $error) {
+        } catch (GenericRequestFailure $error) {
             self::assertSame($response, $error->response);
             self::assertEquals(
                 'https://repo.cdn.prismic.io/api/v2?access_token=token',

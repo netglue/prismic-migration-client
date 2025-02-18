@@ -7,8 +7,10 @@ namespace Prismic\Migration;
 use CuyZ\Valinor\Mapper\Source\JsonSource;
 use CuyZ\Valinor\MapperBuilder;
 use Fig\Http\Message\RequestMethodInterface;
+use Override;
 use Prismic\Migration\Exception\CommunicationFailure;
 use Prismic\Migration\Exception\RequestFailure;
+use Prismic\Migration\Exception\RequestFailureFactory;
 use Prismic\Migration\Exception\UnexpectedResponse;
 use Prismic\Migration\Model\MigrationDocument;
 use Prismic\Migration\Model\MigrationDocumentPatch;
@@ -50,6 +52,7 @@ final readonly class MigrationClientImplementation implements MigrationClient
     ) {
     }
 
+    #[Override]
     public function createDocument(MigrationDocument $document): MigrationResult
     {
         $request = $this->createRequest(
@@ -76,6 +79,7 @@ final readonly class MigrationClientImplementation implements MigrationClient
         }
     }
 
+    #[Override]
     public function updateDocument(MigrationDocumentPatch $document): MigrationResult
     {
         $body = array_filter([
@@ -128,6 +132,10 @@ final readonly class MigrationClientImplementation implements MigrationClient
             ->withHeader('x-api-key', $this->apiKey);
     }
 
+    /**
+     * @throws CommunicationFailure If it is not possible to communicate with the API.
+     * @throws RequestFailure If the response indicates any kind of failure status code.
+     */
     private function sendRequest(RequestInterface $request): ResponseInterface
     {
         try {
@@ -138,7 +146,7 @@ final readonly class MigrationClientImplementation implements MigrationClient
 
         $status = $response->getStatusCode();
         if ($status >= 400) {
-            throw RequestFailure::fromExchange($request, $response);
+            throw RequestFailureFactory::fromExchange($request, $response);
         }
 
         return $response;

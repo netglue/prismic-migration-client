@@ -4,6 +4,6 @@ declare(strict_types=1);
 
 namespace Prismic\Migration\Exception;
 
-interface RequestFailure extends ApiError
+final class AssetNotFound extends GenericRequestFailure
 {
 }
